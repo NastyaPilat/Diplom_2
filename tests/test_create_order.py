@@ -1,18 +1,17 @@
 import requests
 import allure
 import constants
-from utils import create_new_user
+from request_messages import INGREDIENT_IDS_REQUIRED
 
 
 class TestCreateOrder:
 
     @allure.title('Создание заказа с авторизацией')
-    def test_create_order_with_auth(self, example_ingredients):
-        user_data = create_new_user()
+    def test_create_order_with_auth(self, example_ingredients, user):
         register_response = requests.post(
-            constants.USER_REGISTER_URL, data=user_data)
+            constants.USER_REGISTER_URL, data=user)
         login_response = requests.post(
-            constants.USER_LOGIN_URL, data=user_data)
+            constants.USER_LOGIN_URL, data=user)
         data = {'ingredients': example_ingredients}
         response = requests.post(constants.ORDERS_URL, data=data, headers={
             "Authorization": login_response.json()['accessToken']})
@@ -29,7 +28,7 @@ class TestCreateOrder:
         data = {'ingredients': []}
         response = requests.post(constants.ORDERS_URL, data=data)
         assert response.status_code == 400 and not response.json(
-        )['success'] and response.json()['message'] == "Ingredient ids must be provided"
+        )['success'] and response.json()['message'] == INGREDIENT_IDS_REQUIRED
 
     @allure.title('Создание заказа с неверным хешем ингредиентов')
     def test_create_order_with_invalid_ingredients_hash(self, example_ingredients):

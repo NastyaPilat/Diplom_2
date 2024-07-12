@@ -1,18 +1,17 @@
 import requests
 import allure
 import constants
-from utils import create_new_user
+from request_messages import AUTH_REQUIRED
 
 
 class TestGetUserOrders:
 
     @allure.title('Получение заказов авторизованного пользователя')
-    def test_get_user_orders_with_auth(self):
-        user_data = create_new_user()
+    def test_get_user_orders_with_auth(self, user):
         register_response = requests.post(
-            constants.USER_REGISTER_URL, data=user_data)
+            constants.USER_REGISTER_URL, data=user)
         login_response = requests.post(
-            constants.USER_LOGIN_URL, data=user_data)
+            constants.USER_LOGIN_URL, data=user)
         response = requests.get(constants.ORDERS_URL, headers={
             "Authorization": login_response.json()['accessToken']})
         assert response.status_code == 200 and response.json()['success']
@@ -21,4 +20,4 @@ class TestGetUserOrders:
     def test_get_user_orders_without_auth(self):
         response = requests.get(constants.ORDERS_URL)
         assert response.status_code == 401 and not response.json(
-        )['success'] and response.json()['message'] == "You should be authorised"
+        )['success'] and response.json()['message'] == AUTH_REQUIRED
