@@ -1,12 +1,12 @@
 import pytest
 import requests
-import constants
+import endpoints
 from utils import create_new_user
 
 
 @pytest.fixture(scope="class")
 def example_ingredients():
-    response = requests.get(constants.INGREDIENTS_URL).json()['data']
+    response = requests.get(endpoints.INGREDIENTS_URL).json()['data']
     return [ingredient['_id'] for ingredient in response[:2]]
 
 
