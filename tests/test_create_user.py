@@ -1,7 +1,7 @@
 import requests
+import allure
 import constants
 from utils import create_new_user
-import allure
 
 
 class TestCreateUser:
@@ -24,7 +24,7 @@ class TestCreateUser:
         assert register_response_2.status_code == 403 and not register_response_2.json()['success'] and register_response_2.json()[
             'message'] == "User already exists"
 
-    @allure.title('Создание пользователя и не заполнить одно из обязательных полей')
+    @allure.title('Создание пользователя без обязательного поля')
     def test_create_user_with_missing_field(self):
         user_data = create_new_user()
         del user_data['name']

@@ -1,14 +1,14 @@
 import requests
-import constants
-from utils import create_new_user
 import pytest
 import allure
+import constants
+from utils import create_new_user
 
 
 class TestUpdateUser:
 
-    @pytest.mark.parametrize("field", ["email", "name"])
     @allure.title('Изменение данных пользователя с авторизацией')
+    @pytest.mark.parametrize("field", ["email", "name"])
     def test_update_user_with_auth(self, field):
         user_data = create_new_user()
         register_response = requests.post(

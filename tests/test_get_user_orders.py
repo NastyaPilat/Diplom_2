@@ -1,7 +1,7 @@
 import requests
+import allure
 import constants
 from utils import create_new_user
-import allure
 
 
 class TestGetUserOrders:
